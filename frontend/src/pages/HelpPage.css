@@ -1,0 +1,53 @@
+.help-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .help-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.help-type {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+}
+
+.help-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.help-detail {
+  margin: 0 0 1rem;
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}
+
+.help-phone {
+  text-decoration: none;
+  display: inline-flex;
+  width: fit-content;
+}
+
+.help-phone:hover {
+  text-decoration: none;
+}
+
+.help-skeletons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.help-sk {
+  height: 140px;
+  width: 100%;
+}

@@ -1,0 +1,33 @@
+.advice-section {
+  margin-bottom: 2rem;
+}
+
+.advice-cat-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 0.85rem;
+  color: var(--color-primary-dark);
+}
+
+.advice-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.advice-card-text {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}
+
+.advice-skeletons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.advice-sk {
+  height: 120px;
+  width: 100%;
+}
