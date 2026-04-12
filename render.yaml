@@ -8,6 +8,7 @@ services:
     rootDir: backend
     buildCommand: pip install -r requirements.txt
     startCommand: python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+    # Render default Python is 3.14+ (2026+); pydantic-core / PyO3 әлі 3.14 қолдамайды.
     envVars:
       - key: PYTHON_VERSION
         value: "3.11.9"

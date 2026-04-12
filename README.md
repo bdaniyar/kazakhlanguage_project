@@ -69,3 +69,13 @@ npm run build
    (портты `10000` деп бекіту емес — Render `$PORT` береді.)
 
 Репода түбінде `render.yaml` (Blueprint) бар: `rootDir: backend` және сол командалар көрсетілген. Жаңа сервисті Blueprint арқылы ашсаңыз немесе бар сервисті осы файлға сәйкес жаңартсаңыз, бірдей нәтиже шығады.
+
+### Python 3.14 және `pydantic-core` / PyO3 қатесі
+
+2026 жылдан бастап Render **әдепкі түрде Python 3.14** қолданады. `pydantic-core` Rust арқылы жиналады да, **PyO3 әлі 3.14 қолдамайды** (`newer than PyO3's maximum supported version (3.13)`).
+
+**Міндетті:** Render Dashboard → сервис → **Environment** → қосыңыз:
+
+- `PYTHON_VERSION` = `3.11.9` (толық нұсқа, мысалы `3.11.9` немесе `3.13.5`)
+
+Немесе репода `.python-version` (түбінде және `backend/` ішінде) файлдары бар — `3.11.9` бір жолмен. Бірінші кезекте **PYTHON_VERSION** орын алады ([Render docs](https://render.com/docs/python-version)).
