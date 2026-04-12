@@ -17,6 +17,13 @@ pip install -r requirements.txt
 uvicorn main:app --reload --host 127.0.0.1 --port 8000
 ```
 
+### PostgreSQL (Render) немесе SQLite
+
+- **Жергілікті:** `DATABASE_URL` жоқ болса, SQLite пайдаланылады (`backend/jansaqta.db`).
+- **Render:** PostgreSQL сервисінде **Internal Database URL** алыңыз да, Render веб-сервисінің **Environment** ішіне `DATABASE_URL` ретінде салыңыз. Локалда сынақ үшін сол URL-ді `backend/.env` файлына көшіріңіз (үлгі: `.env.example`).
+
+`DATABASE_URL` бар кезде `main.py` іске қосылғанда кестелер (`diary_entries`) бірінші рет автоматты жасалады.
+
 API: [http://127.0.0.1:8000](http://127.0.0.1:8000)  
 Автомат сипаттама: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
