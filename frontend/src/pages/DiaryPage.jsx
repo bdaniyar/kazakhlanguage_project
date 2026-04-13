@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { apiFetch } from "../api/client.js";
+import { formatKZDateTime } from "../utils/datetime.js";
 import "./Page.css";
 import "./DiaryPage.css";
 
@@ -155,10 +156,7 @@ export default function DiaryPage() {
           {entries.map((en) => (
             <li key={`${typeof en.id === "number" ? "a" : "l"}-${en.id}`} className="diary-item card">
               <time className="diary-time" dateTime={en.created_at}>
-                {new Date(en.created_at).toLocaleString("kk-KZ", {
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                })}
+                {formatKZDateTime(en.created_at)}
               </time>
               <p className="diary-content">{en.content}</p>
             </li>
