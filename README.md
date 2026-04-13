@@ -1,13 +1,13 @@
 # JanSaqta
 
-Студенттер үшін психологиялық көмек платформасы: стресс тесті, кеңестер, эмоциялық күнделік және көмек байланыстары. Интерфейс — қазақ тілінде (кириллица).
+Платформа психологической поддержки для студентов: стресс-тест, советы, эмоциональный дневник и контакты помощи. Интерфейс — на казахском языке (кириллица).
 
-## Құрылым
+## Структура проекта
 
 - `frontend/` — React (Vite)
 - `backend/` — FastAPI, SQLite (`jansaqta.db`)
 
-## Backend іске қосу
+## Запуск backend
 
 ```bash
 cd backend
@@ -17,19 +17,19 @@ pip install -r requirements.txt
 uvicorn main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-### PostgreSQL (Render) немесе SQLite
+### PostgreSQL (Render) или SQLite
 
-- **Жергілікті:** `DATABASE_URL` жоқ болса, SQLite пайдаланылады (`backend/jansaqta.db`).
-- **Render:** PostgreSQL сервисінде **Internal Database URL** алыңыз да, Render веб-сервисінің **Environment** ішіне `DATABASE_URL` ретінде салыңыз. Локалда сынақ үшін сол URL-ді `backend/.env` файлына көшіріңіз (үлгі: `.env.example`).
+- **Локально:** если `DATABASE_URL` не задан, используется SQLite (`backend/jansaqta.db`).
+- **Render:** возьмите **Internal Database URL** в сервисе PostgreSQL и добавьте его в **Environment** веб-сервиса как `DATABASE_URL`. Для локальной проверки можно скопировать этот URL в `backend/.env` (шаблон: `.env.example`).
 
-`DATABASE_URL` бар кезде `main.py` іске қосылғанда кестелер (`diary_entries`) бірінші рет автоматты жасалады.
+Если `DATABASE_URL` задан, при первом запуске `main.py` таблицы (`diary_entries`) создаются автоматически.
 
 API: [http://127.0.0.1:8000](http://127.0.0.1:8000)  
-Автомат сипаттама: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+Swagger: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
-## Frontend іске қосу
+## Запуск frontend
 
-Бірінші терминалда backendті қосыңыз. Екінші терминалда:
+В первом терминале запустите backend. Во втором:
 
 ```bash
 cd frontend
@@ -39,61 +39,74 @@ npm run dev
 
 Сайт: [http://localhost:5173](http://localhost:5173)
 
-Даму режимінде Vite `/api` сұрауларын `http://127.0.0.1:8000` мекенжайына проксилейді.
+В режиме разработки Vite проксирует запросы `/api` на `http://127.0.0.1:8000`.
 
-## Production үшін (қысқаша)
+## Production (кратко)
 
-Frontendті жинаңыз:
+Сборка frontend:
 
 ```bash
 cd frontend
 npm run build
 ```
 
-**Production / удалённый API:** фронтенд сұраулары **`VITE_API_URL`** арқылы бэкке барады.
+**Production / удалённый API:** frontend отправляет запросы в backend через **`VITE_API_URL`**.
 
-1. `frontend/` ішінде `.env.local` жасаңыз (немесе хостингтің Build Environment ішінде):
+1. В `frontend/` создайте `.env.local` (или задайте переменную в Build Environment вашего хостинга):
    ```bash
-   VITE_API_URL=https://sizdin-backend.onrender.com
+   VITE_API_URL=https://your-backend.onrender.com
    ```
-   Соңында **`/`** қоймаңыз.
-2. `npm run build` немесе `npm run dev` — Vite осы мәнді құрастыру кезінде қосады.
+   Без `/` в конце.
+2. Запустите `npm run build` или `npm run dev` — Vite подхватит значение во время сборки.
 
-Жергілікті даму: `VITE_API_URL` **жоқ** болса, сұраулар `/api` арқылы проксиленеді (`vite.config.js` → `127.0.0.1:8000`).
+Локальная разработка: если `VITE_API_URL` **не задан**, запросы идут через `/api`-прокси (`vite.config.js` → `127.0.0.1:8000`).
 
-Үлгі: `frontend/.env.example`.
+Пример: `frontend/.env.example`.
 
 ## API endpoints
 
-| Method | Path | Мағынасы |
-|--------|------|-----------|
-| POST | `/test/submit` | Стресс жауаптары → деңгей |
-| GET | `/advice` | Кеңестер тізімі |
-| POST | `/diary` | Күнделік жазбасын сақтау |
-| GET | `/diary` | Барлық жазбалар |
-| GET | `/help` | Көмек контактілері |
+| Method | Path | Назначение |
+|--------|------|------------|
+| POST | `/test/submit` | Ответы теста на стресс → уровень |
+| GET | `/advice` | Список советов |
+| POST | `/diary` | Сохранить запись дневника |
+| GET | `/diary` | Получить все записи |
+| GET | `/help` | Контакты помощи |
+
+## Predeploy-тест (рекомендуется)
+
+Одна команда для проверки backend + сборки frontend:
+
+```bash
+./scripts/predeploy.sh
+```
+
+Что делает скрипт:
+- устанавливает зависимости backend;
+- запускает API-тесты через `pytest`;
+- выполняет `npm run build` для frontend.
 
 ---
 
-## Render.com — деплой қатесі: `uvicorn: command not found` (127)
+## Render.com — ошибка деплоя: `uvicorn: command not found` (127)
 
-**Себептер:** (1) **Root Directory** репо түбі болып қойылған — сол жерде `requirements.txt` жоқ, сондықтан `pip install` еш нәрсе орнатпайды (build 0.03 с сияқты тым жылдам болуы мүмкін). (2) `uvicorn` PATH-та болмауы — `python -m uvicorn` қолдану қауіпсіз.
+**Причины:** (1) **Root Directory** выставлен в корень репозитория, где нет `requirements.txt`, поэтому `pip install` ничего не ставит (часто заметно по слишком быстрой сборке, например 0.03 s). (2) `uvicorn` может отсутствовать в PATH — безопаснее запускать через `python -m uvicorn`.
 
-**Шешім (қолмен Dashboard):**
+**Решение (в Dashboard):**
 
-1. **Settings → Root Directory** → `backend` етіп қойыңыз.
+1. **Settings → Root Directory** → укажите `backend`.
 2. **Build Command:** `pip install -r requirements.txt`
 3. **Start Command:** `python -m uvicorn main:app --host 0.0.0.0 --port $PORT`  
-   (портты `10000` деп бекіту емес — Render `$PORT` береді.)
+   (не фиксируйте порт `10000` вручную — Render передаёт `$PORT`).
 
-Репода түбінде `render.yaml` (Blueprint) бар: `rootDir: backend` және сол командалар көрсетілген. Жаңа сервисті Blueprint арқылы ашсаңыз немесе бар сервисті осы файлға сәйкес жаңартсаңыз, бірдей нәтиже шығады.
+В корне репозитория есть `render.yaml` (Blueprint): `rootDir: backend` и те же команды. Можно создать/обновить сервис через Blueprint.
 
-### Python 3.14 және `pydantic-core` / PyO3 қатесі
+### Ошибка Python 3.14 и `pydantic-core` / PyO3
 
-2026 жылдан бастап Render **әдепкі түрде Python 3.14** қолданады. `pydantic-core` Rust арқылы жиналады да, **PyO3 әлі 3.14 қолдамайды** (`newer than PyO3's maximum supported version (3.13)`).
+С 2026 года Render по умолчанию использует **Python 3.14**. `pydantic-core` собирается через Rust, а **PyO3 пока не поддерживает 3.14** (`newer than PyO3's maximum supported version (3.13)`).
 
-**Міндетті:** Render Dashboard → сервис → **Environment** → қосыңыз:
+**Обязательно:** Render Dashboard → сервис → **Environment**:
 
-- `PYTHON_VERSION` = `3.11.9` (толық нұсқа, мысалы `3.11.9` немесе `3.13.5`)
+- `PYTHON_VERSION` = `3.11.9` (полная версия, например `3.11.9` или `3.13.5`)
 
-Немесе репода `.python-version` (түбінде және `backend/` ішінде) файлдары бар — `3.11.9` бір жолмен. Бірінші кезекте **PYTHON_VERSION** орын алады ([Render docs](https://render.com/docs/python-version)).
+Также в репозитории есть `.python-version` (в корне и в `backend/`) со значением `3.11.9`. Приоритет выше у переменной окружения **PYTHON_VERSION** ([Render docs](https://render.com/docs/python-version)).

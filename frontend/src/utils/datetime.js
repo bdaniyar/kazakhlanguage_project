@@ -7,7 +7,13 @@ export const KZ_TIME_ZONE = "Asia/Almaty";
  */
 export function formatKZDateTime(value, locale = "kk-KZ") {
     if (!value) return "";
-    const d = value instanceof Date ? value : new Date(value);
+    let normalized = value;
+    if (typeof value === "string") {
+        const hasExplicitTz = /([zZ]|[+-]\d{2}:\d{2})$/.test(value);
+        // Backend may send naive UTC (without timezone suffix).
+        if (!hasExplicitTz) normalized = `${value}Z`;
+    }
+    const d = normalized instanceof Date ? normalized : new Date(normalized);
     if (Number.isNaN(d.getTime())) return "";
 
     return new Intl.DateTimeFormat(locale, {
