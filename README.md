@@ -50,7 +50,18 @@ cd frontend
 npm run build
 ```
 
-`VITE_API_URL` өзгерісі арқылы API негізін көрсетіңіз (мысалы: `https://api.sіздің-доменыңыз.kz`). Содан кейін CORS тізімін `backend/main.py` ішінде жаңартыңыз.
+**Production / удалённый API:** фронтенд сұраулары **`VITE_API_URL`** арқылы бэкке барады.
+
+1. `frontend/` ішінде `.env.local` жасаңыз (немесе хостингтің Build Environment ішінде):
+   ```bash
+   VITE_API_URL=https://sizdin-backend.onrender.com
+   ```
+   Соңында **`/`** қоймаңыз.
+2. `npm run build` немесе `npm run dev` — Vite осы мәнді құрастыру кезінде қосады.
+
+Жергілікті даму: `VITE_API_URL` **жоқ** болса, сұраулар `/api` арқылы проксиленеді (`vite.config.js` → `127.0.0.1:8000`).
+
+Үлгі: `frontend/.env.example`.
 
 ## API endpoints
 
